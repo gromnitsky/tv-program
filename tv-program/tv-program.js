@@ -43,18 +43,21 @@ customElements.define('tv-program', class extends HTMLElement {
 }
 </style>
 
-<img id="snow" src="${url('snow.gif')}">
+<video id="snow" loop="true" muted="true" autoplay="true">
+  <source src="${url('snow.mp4')}">
+</video>
 <video id="program" loop="true" muted="true">
   <source src="${video}">
 </video>
 <img id="frame" src="${url('tv.png')}">`
 
         this.transition = 5000
-        this.tv_frame = sr.querySelector('#frame')
+        this.tv_snow = sr.querySelector('#snow')
         this.tv_program = sr.querySelector('#program')
+        this.tv_frame = sr.querySelector('#frame')
         this.boot = 0
 
-        this.tv_frame.onmouseenter = this.snow.bind(this)
+        this.tv_frame.onmouseenter = this.tune_out.bind(this)
         this.tv_frame.onmouseleave = this.on.bind(this)
         this.tv_frame.onclick = this.toggle.bind(this)
         setTimeout(this.on.bind(this), 100)
@@ -68,20 +71,30 @@ customElements.define('tv-program', class extends HTMLElement {
         this.program_timer = setTimeout( () => {
             this.tv_program.play()
             this.log("tv play")
+            this.snow(false)
         }, this.transition)
         this.boot = 1
     }
 
-    snow() {
-        if (this.tv_program.paused) return
+    snow(on) {
+        if (on) {
+            clearTimeout(this.program_timer)
+            this.tv_program.style.opacity = 0
+            this.tv_snow.play()
+        } else {
+            this.tv_program.style.opacity = 1
+            this.tv_snow.pause()
+        }
+    }
 
+    tune_out() {
+        if (this.tv_program.paused) return
         this.log("tv snow")
-        clearTimeout(this.program_timer)
-        this.tv_program.style.opacity = 0
+        this.snow(true)
     }
 
     toggle() {
-        this.tv_program.style.opacity = 1
+        this.snow(false)
         this.tv_program.paused ? this.tv_program.play() : this.tv_program.pause()
     }
 
