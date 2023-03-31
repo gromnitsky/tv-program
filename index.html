@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    <title>tv-program</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      @media (min-width: 701px) {
+        body {
+          width: 700px;
+          margin: 8px auto;
+        }
+      }
+
+      body > div {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      #sidebar { width: 30%; }
+      #content { width: 70%; }
+      tv-program { width: 50%; }
+
+      @media (max-width: 450px) {
+        #sidebar { display: none; }
+        #content { width: 100%; }
+        tv-program { width: 100%; }
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <h1>&lt;tv-program&gt; web component</h1>
+
+    <div>
+      <div id="sidebar">
+        <p>
+          Nullam eu ante vel est convallis dignissim.  Fusce suscipit,
+          wisi nec facilisis facilisis, est dui fermentum leo, quis
+          tempor ligula erat quis odio.  Nunc porta vulputate tellus.
+          Nunc rutrum turpis sed pede.  Sed bibendum.  Aliquam
+          posuere.  Nunc aliquet, augue nec adipiscing interdum, lacus
+          tellus malesuada massa, quis varius mi purus non odio.
+          Pellentesque condimentum, magna ut suscipit hendrerit, ipsum
+          augue ornare nulla, non luctus diam neque sit amet urna.
+          Curabitur vulputate vestibulum lorem.
+        </p>
+      </div>
+
+      <div id="content">
+        <p>
+          Pellentesque dapibus suscipit ligula.  Donec posuere augue
+          in quam.  Etiam vel tortor sodales tellus ultricies commodo.
+          Suspendisse potenti.  Aenean in sem ac leo mollis blandit.
+        </p>
+
+        <tv-program debug="true"></tv-program>
+
+        <p>
+          Vestibulum convallis, lorem a tempus semper, dui dui euismod
+          elit, vitae placerat urna tortor vitae lacus.  Nullam libero
+          mauris, consequat quis, varius et, dictum id, arcu.  Mauris
+          mollis tincidunt felis.
+        </p>
+      </div>
+    </div>
+
+    <script type="module" src="tv-program/tv-program.js"></script>
+
+    <script>
+      function fix_tv_margin() {
+          let tv = document.querySelector('tv-program')
+          let h = tv.shadowRoot.querySelector('#frame').clientHeight
+          tv.style.marginBottom = `calc(${h}px + 2em)`
+      }
+
+      addEventListener("load", fix_tv_margin)
+      addEventListener("resize", fix_tv_margin)
+    </script>
+
+  </body>
+</html>
