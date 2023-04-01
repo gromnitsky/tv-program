@@ -5,9 +5,9 @@ customElements.define('tv-program', class extends HTMLElement {
         super()
 
         let video = this.getAttribute('src') || url('Pooyan.1985.nes.mp4')
-        let x = this.getAttribute('x') || '16' // %
+        let x = this.getAttribute('x') || '14' // %
         let y = this.getAttribute('y') || '45'
-        let width = this.getAttribute('width') || '65'
+        let width = this.getAttribute('width') || '63'
         this.debug = this.getAttribute('debug')
 
         let sr = this.attachShadow({mode: 'open'})
