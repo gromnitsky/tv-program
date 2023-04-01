@@ -1,41 +1,36 @@
+let devices = {
+    'crt tv with antenna': {
+        frame_url: url('frame1.png'),
+        snow: { width: 65, x: 13, y: 57 },
+        program: { width: 63, x: 14, y: 45 }
+    },
+    'black crt tv': {
+        frame_url: url('frame2.png'),
+        snow: { width: 85, x: 10, y: 18 },
+        program: { width: 83, x: 10, y: 14 }
+    },
+    'white crt monitor': {
+        frame_url: url('frame3.png'),
+        snow: { width: 85, x: 10, y: 10 },
+        program: { width: 83, x: 10, y: 5 }
+    },
+    'imac g3': {
+        frame_url: url('frame4.png'),
+        snow: { width: 85, x: 10, y: 17 },
+        program: { width: 83, x: 10, y: 10 }
+    }
+}
+
 function url(s) { return new URL(s, import.meta.url).href }
 
 customElements.define('tv-program', class extends HTMLElement {
     constructor() {
         super()
 
-        let frame = this.getAttribute('frame') || 'frame1'
-        let opt = {
-            frame1: {
-                frame_url: url('frame1.png'),
-                snow: {
-                    width: 65,
-                    x: 13,
-                    y: 57,
-                },
-                program: {
-                    width: 63,
-                    x: 14,
-                    y: 45,
-                }
-            },
-            frame2: {
-                frame_url: url('frame2.png'),
-                snow: {
-                    width: 84,
-                    x: 10,
-                    y: 18,
-                },
-                program: {
-                    width: 83,
-                    x: 10,
-                    y: 16,
-                }
-            }
-        }
-
+        let device = this.getAttribute('device') || 'crt tv with antenna'
         let video = this.getAttribute('src') || url('Pooyan.1985.nes.mp4')
-        opt = opt[frame]
+        let opt = devices[device]; if (!opt) throw new Error('unknown device')
+
         opt.program.width = this.getAttribute('width') || opt.program.width
         opt.program.x = this.getAttribute('x') || opt.program.x
         opt.program.y = this.getAttribute('y') || opt.program.y
