@@ -4,10 +4,41 @@ customElements.define('tv-program', class extends HTMLElement {
     constructor() {
         super()
 
+        let frame = this.getAttribute('frame') || 'frame1'
+        let opt = {
+            frame1: {
+                frame_url: url('frame1.png'),
+                snow: {
+                    width: 65,
+                    x: 13,
+                    y: 57,
+                },
+                program: {
+                    width: 63,
+                    x: 14,
+                    y: 45,
+                }
+            },
+            frame2: {
+                frame_url: url('frame2.png'),
+                snow: {
+                    width: 84,
+                    x: 10,
+                    y: 18,
+                },
+                program: {
+                    width: 83,
+                    x: 10,
+                    y: 16,
+                }
+            }
+        }
+
         let video = this.getAttribute('src') || url('Pooyan.1985.nes.mp4')
-        let x = this.getAttribute('x') || '14' // %
-        let y = this.getAttribute('y') || '45'
-        let width = this.getAttribute('width') || '63'
+        opt = opt[frame]
+        opt.program.width = this.getAttribute('width') || opt.program.width
+        opt.program.x = this.getAttribute('x') || opt.program.x
+        opt.program.y = this.getAttribute('y') || opt.program.y
         this.debug = this.getAttribute('debug')
 
         let sr = this.attachShadow({mode: 'open'})
@@ -20,16 +51,15 @@ customElements.define('tv-program', class extends HTMLElement {
 }
 
 #snow {
-  width: 65%;
+  width: ${opt.snow.width}%;
   position: absolute;
-  transform: translate(13%, 57%);
+  transform: translate(${opt.snow.x}%, ${opt.snow.y}%);
 }
 
 #program {
-  width: ${width}%;
+  width: ${opt.program.width}%;
   position: absolute;
-  transform: translate(${x}%, ${y}%);
-  filter: sepia(50%);
+  transform: translate(${opt.program.x}%, ${opt.program.y}%);
 
   opacity: 0;
   transition: opacity 5s ease-in-out;
@@ -49,7 +79,7 @@ customElements.define('tv-program', class extends HTMLElement {
 <video id="program" loop="true" muted="true">
   <source src="${video}">
 </video>
-<img id="frame" src="${url('tv.png')}">`
+<img id="frame" src="${opt.frame_url}">`
 
         this.transition = 5000
         this.tv_snow = sr.querySelector('#snow')
