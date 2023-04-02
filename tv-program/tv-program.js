@@ -74,7 +74,7 @@ customElements.define('tv-program', class extends HTMLElement {
 <video id="program" loop="true" muted="true">
   <source src="${video}">
 </video>
-<img id="frame" src="${opt.frame_url}">`
+<img alt="device frame" id="frame" src="${opt.frame_url}">`
 
         this.transition = 5000
         this.tv_snow = sr.querySelector('#snow')
