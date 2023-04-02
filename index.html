@@ -1,83 +1,70 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
-    <title>tv-program</title>
+    <title>&lt;tv-program&gt; web component</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-      @media (min-width: 701px) {
+      @media (min-width: 601px) {
         body {
-          width: 700px;
+          width: 600px;
           margin: 8px auto;
         }
       }
 
-      body > div {
-        display: flex;
-        flex-direction: row;
-        gap: 20px;
-      }
+      pre { white-space: pre-wrap; }
+      form { margin-bottom: 1em; }
 
-      #sidebar { width: 30%; }
-      #content { width: 70%; }
-      tv-program { width: 50%; }
+      #device {
+        width: 40%;
+        margin: 0 auto;
+      }
 
       @media (max-width: 450px) {
-        #sidebar { display: none; }
-        #content { width: 100%; }
-        tv-program { width: 100%; }
+        #device { width: 90%; }
       }
-
     </style>
   </head>
-  <body>
 
+  <body>
     <h1>&lt;tv-program&gt; web component</h1>
 
-    <div>
-      <div id="sidebar">
-        <p>
-          Nullam eu ante vel est convallis dignissim.  Fusce suscipit,
-          wisi nec facilisis facilisis, est dui fermentum leo, quis
-          tempor ligula erat quis odio.  Nunc porta vulputate tellus.
-          Nunc rutrum turpis sed pede.  Sed bibendum.  Aliquam
-          posuere.  Nunc aliquet, augue nec adipiscing interdum, lacus
-          tellus malesuada massa, quis varius mi purus non odio.
-          Pellentesque condimentum, magna ut suscipit hendrerit, ipsum
-          augue ornare nulla, non luctus diam neque sit amet urna.
-          Curabitur vulputate vestibulum lorem.
-        </p>
-      </div>
+    <p><a href="https://github.com/gromnitsky/tv-program">Github</a></p>
 
-      <div id="content">
-        <p>
-          Pellentesque dapibus suscipit ligula.  Donec posuere augue
-          in quam.  Etiam vel tortor sodales tellus ultricies commodo.
-          Suspendisse potenti.  Aenean in sem ac leo mollis blandit.
-        </p>
+    <form>
+      Select device: <select></select>, hover for "snow", click to pause.
+    </form>
 
-        <tv-program debug="true" device="black crt tv"></tv-program>
+    <div id="device"></div>
 
-        <p>
-          Vestibulum convallis, lorem a tempus semper, dui dui euismod
-          elit, vitae placerat urna tortor vitae lacus.  Nullam libero
-          mauris, consequat quis, varius et, dictum id, arcu.  Mauris
-          mollis tincidunt felis.
-        </p>
-      </div>
-    </div>
+    <p>HTML code:</p>
 
-    <script type="module" src="tv-program/tv-program.js"></script>
+    <pre id="example"></pre>
 
-    <script>
-      function fix_tv_margin() {
-          let tv = document.querySelector('tv-program')
-          let h = tv.shadowRoot.querySelector('#frame').clientHeight
-          tv.style.marginBottom = `calc(${h}px + 2em)`
+    <script type="module">
+      import {devices} from './tv-program/tv-program.js'
+
+      let device = document.querySelector('#device')
+      let select = document.querySelector('select')
+      select.innerHTML = Object.keys(devices).map( dev => {
+          return `<option value="${dev}">${dev}</option>`
+      }).join`\n`
+      select.onchange = evt => inject_device(evt.target.value)
+
+      function inject_device(name) {
+          device.innerHTML = `<tv-program debug="true" device="${name}"></tv-program>`
+          document.querySelector('#example').innerText = `<tv-program device="${name}"></tv-program>`
+          setTimeout(fix_device_height, 100)
       }
 
-      addEventListener("load", fix_tv_margin)
-      addEventListener("resize", fix_tv_margin)
+      function fix_device_height() {
+          let tv = document.querySelector('tv-program')
+          let h = tv.shadowRoot.querySelector('#frame').clientHeight
+          device.style.height = `${h}px`
+      }
+      addEventListener("resize", fix_device_height)
+
+      inject_device("crt tv with antenna")
     </script>
 
   </body>

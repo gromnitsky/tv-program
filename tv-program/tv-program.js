@@ -1,4 +1,4 @@
-let devices = {
+export let devices = {
     'crt tv with antenna': {
         frame_url: url('frame1.png'),
         snow: { width: 65, x: 13, y: 57 },
