@@ -33,13 +33,12 @@ To select:
 
 Events:
 
-* `device-frame-load`: fires when a device frame picture is fully
-  loaded.
+* `program-canplay`: fires when the "tv program" video starts playing.
 
   ~~~
   let device = device.querySelector('tv-program')
-  device.addEventListener('device-frame-load', evt => {
-      console.log(evt.detail.target.height)
+  device.addEventListener('program-canplay', evt => {
+      console.log(evt.target)
   })
   ~~~
 

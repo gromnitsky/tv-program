@@ -28,7 +28,7 @@ customElements.define('tv-program', class extends HTMLElement {
         super()
 
         let device = this.getAttribute('device') || 'crt tv with antenna'
-        let video = this.getAttribute('src') || url('Pooyan.1985.nes.mp4')
+        this.src = this.getAttribute('src') || url('Pooyan.1985.nes.mp4')
         let opt = devices[device]; if (!opt) throw new Error('unknown device')
 
         opt.program.width = this.getAttribute('width') || opt.program.width
@@ -36,6 +36,7 @@ customElements.define('tv-program', class extends HTMLElement {
         opt.program.y = this.getAttribute('y') || opt.program.y
         this.debug = this.getAttribute('debug')
 
+        this.transition = 5000
         let sr = this.attachShadow({mode: 'open'})
         sr.innerHTML = `
 <style>
@@ -58,7 +59,7 @@ customElements.define('tv-program', class extends HTMLElement {
   transform: translate(${opt.program.x}%, ${opt.program.y}%);
 
   opacity: 0;
-  transition: opacity 5s ease-in-out;
+  transition: opacity ${this.transition/1000}s ease-in-out;
 }
 
 #frame {
@@ -67,32 +68,38 @@ customElements.define('tv-program', class extends HTMLElement {
 }
 </style>
 
-<video id="snow" loop="true" muted="true" autoplay="true">
-  <source src="${url('snow.mp4')}">
-</video>
-<video id="program" loop="true" muted="true">
-  <source src="${video}">
-</video>
 <img alt="device frame" id="frame" src="${opt.frame_url}">`
 
-        this.transition = 5000
-        this.tv_snow = sr.querySelector('#snow')
-        this.tv_program = sr.querySelector('#program')
         this.tv_frame = sr.querySelector('#frame')
-        this.boot = 0
-
         this.tv_frame.onload = this.device_frame_load.bind(this)
-        this.tv_frame.onmouseenter = this.tune_out.bind(this)
-        this.tv_frame.onmouseleave = this.on.bind(this)
-        this.tv_frame.onclick = this.toggle.bind(this)
-        setTimeout(this.on.bind(this), 100)
+        this.boot = 0
     }
 
     device_frame_load() {
-        this.dispatchEvent(new CustomEvent('device-frame-load', {
-            bubbles: true,
-            detail: { target: this.tv_frame }
-        }))
+        let mkvid = (sibling, id, href) => {
+            let node = document.createElement('video')
+            node.id = id
+            node.loop = true
+            node.muted = true
+            let src = document.createElement('source')
+            src.src = url(href)
+            node.appendChild(src)
+            sibling.after(node)
+            return node
+        }
+
+        this.tv_snow = mkvid(this.tv_frame, "snow", "snow.mp4")
+        this.tv_snow.autoplay = "true"
+
+        this.tv_program = mkvid(this.tv_snow, "program", this.src)
+        this.tv_program.addEventListener('canplay', () => {
+            this.dispatchEvent(new Event('program-canplay', { bubbles: true }))
+            if (!this.boot) this.on()
+        })
+
+        this.tv_frame.onmouseenter = this.tune_out.bind(this)
+        this.tv_frame.onmouseleave = this.on.bind(this)
+        this.tv_frame.onclick = this.toggle.bind(this)
     }
 
     on() {
