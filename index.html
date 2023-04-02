@@ -44,7 +44,6 @@
     <script type="module">
       import {devices} from './tv-program/tv-program.js'
 
-      let device = document.querySelector('#device')
       let select = document.querySelector('select')
       select.innerHTML = Object.keys(devices).map( dev => {
           return `<option value="${dev}">${dev}</option>`
@@ -52,16 +51,9 @@
       select.onchange = evt => inject_device(evt.target.value)
 
       function inject_device(name) {
-          device.innerHTML = `<tv-program debug="true" device="${name}"></tv-program>`
-          device.querySelector('tv-program')
-              .addEventListener('device-frame-load', fix_device_height)
+          document.querySelector('#device').innerHTML = `<tv-program debug="true" device="${name}"></tv-program>`
           document.querySelector('#example').innerText = `<tv-program device="${name}"></tv-program>`
       }
-
-      function fix_device_height(evt) {
-          device.style.height = `${evt.detail.target.height}px`
-      }
-      addEventListener("resize", fix_device_height)
 
       inject_device("crt tv with antenna")
     </script>

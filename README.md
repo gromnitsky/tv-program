@@ -18,14 +18,14 @@ To specify your own video:
 
     <tv-program src="file.mp4" width="80" x="10" y="15"></tv-program>
 
-`width`, `x`, `y` params are % relative to the device frame.
+optional `width`, `x`, and `y` params are % relative to the device frame.
 
 Several "device" frames are available:
 
-* crt tv with antenna (default)
-* black crt tv
-* white crt monitor
-* imac g3
+* `crt tv with antenna` (default)
+* `black crt tv`
+* `white crt monitor`
+* `imac g3`
 
 To select:
 
@@ -39,7 +39,7 @@ Events:
   ~~~
   let device = device.querySelector('tv-program')
   device.addEventListener('device-frame-load', evt => {
-      device.style.height = `${evt.detail.target.height}px`
+      console.log(evt.detail.target.height)
   })
   ~~~
 

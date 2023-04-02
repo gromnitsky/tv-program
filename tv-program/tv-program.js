@@ -40,20 +40,21 @@ customElements.define('tv-program', class extends HTMLElement {
         sr.innerHTML = `
 <style>
 :host {
-  display: block;
+  display: grid;
   width: 100%;
-  position: relative;
+}
+
+:host > * {
+  grid-area: 1/1;
 }
 
 #snow {
   width: ${opt.snow.width}%;
-  position: absolute;
   transform: translate(${opt.snow.x}%, ${opt.snow.y}%);
 }
 
 #program {
   width: ${opt.program.width}%;
-  position: absolute;
   transform: translate(${opt.program.x}%, ${opt.program.y}%);
 
   opacity: 0;
@@ -62,9 +63,7 @@ customElements.define('tv-program', class extends HTMLElement {
 
 #frame {
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  z-index: 1;
 }
 </style>
 
