@@ -53,14 +53,13 @@
 
       function inject_device(name) {
           device.innerHTML = `<tv-program debug="true" device="${name}"></tv-program>`
+          device.querySelector('tv-program')
+              .addEventListener('device-frame-load', fix_device_height)
           document.querySelector('#example').innerText = `<tv-program device="${name}"></tv-program>`
-          setTimeout(fix_device_height, 100)
       }
 
-      function fix_device_height() {
-          let tv = document.querySelector('tv-program')
-          let h = tv.shadowRoot.querySelector('#frame').clientHeight
-          device.style.height = `${h}px`
+      function fix_device_height(evt) {
+          device.style.height = `${evt.detail.target.height}px`
       }
       addEventListener("resize", fix_device_height)
 

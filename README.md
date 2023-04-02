@@ -31,6 +31,18 @@ To select:
 
     <tv-program device="imac g3" ...></tv-program>
 
+Events:
+
+* `device-frame-load`: fires when a device frame picture is fully
+  loaded.
+
+  ~~~
+  let device = device.querySelector('tv-program')
+  device.addEventListener('device-frame-load', evt => {
+      device.style.height = `${evt.detail.target.height}px`
+  })
+  ~~~
+
 ## Loicense
 
 MIT

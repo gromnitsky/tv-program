@@ -82,10 +82,18 @@ customElements.define('tv-program', class extends HTMLElement {
         this.tv_frame = sr.querySelector('#frame')
         this.boot = 0
 
+        this.tv_frame.onload = this.device_frame_load.bind(this)
         this.tv_frame.onmouseenter = this.tune_out.bind(this)
         this.tv_frame.onmouseleave = this.on.bind(this)
         this.tv_frame.onclick = this.toggle.bind(this)
         setTimeout(this.on.bind(this), 100)
+    }
+
+    device_frame_load() {
+        this.dispatchEvent(new CustomEvent('device-frame-load', {
+            bubbles: true,
+            detail: { target: this.tv_frame }
+        }))
     }
 
     on() {
