@@ -118,7 +118,7 @@ customElements.define('tv-program', class extends HTMLElement {
             }, 100)
             this.tv_frame.style.visibility = 'visible'
         }, {once: true})
-        this.tv_snow.autoplay = "true"
+        this.tv_snow.autoplay = true
 
         this.tv_program = mkvid(this.tv_snow, "program", this.src)
         this.tv_program.addEventListener('canplay', () => {
