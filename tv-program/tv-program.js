@@ -103,6 +103,7 @@ customElements.define('tv-program', class extends HTMLElement {
             node.loop = true
             node.muted = true
             let src = document.createElement('source')
+            src.addEventListener('error', () => this.boot = -1)
             src.src = url(href)
             node.appendChild(src)
             sibling.after(node)
@@ -132,7 +133,8 @@ customElements.define('tv-program', class extends HTMLElement {
     }
 
     on() {
-        if (this.boot && this.tv_program.paused) return
+        if (this.boot < 0) return
+        if (this.boot > 0 && this.tv_program.paused) return
 
         this.log("tv on")
         this.tv_program.style.opacity = 1
@@ -162,6 +164,7 @@ customElements.define('tv-program', class extends HTMLElement {
     }
 
     toggle() {
+        if (this.boot < 0) return
         this.snow(false)
         this.tv_program.paused ? this.tv_program.play() : this.tv_program.pause()
     }
