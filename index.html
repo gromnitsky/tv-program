@@ -1,62 +1,61 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <title>&lt;tv-program&gt; web component</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-      @media (min-width: 601px) {
-        body {
-          width: 600px;
-          margin: 8px auto;
-        }
-      }
+<meta charset="utf-8">
+<title>&lt;tv-program&gt; web component</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  @media (min-width: 601px) {
+    body {
+      width: 600px;
+      margin: 8px auto;
+    }
+  }
 
-      pre { white-space: pre-wrap; }
-      form { margin-bottom: 1em; }
+  pre { white-space: pre-wrap; }
+  form { margin-bottom: 1em; }
 
-      #device {
-        width: 40%;
-        margin: 0 auto;
-      }
+  #device {
+    width: 40%;
+    margin: 0 auto;
+  }
 
-      @media (max-width: 450px) {
-        #device { width: 90%; }
-      }
-    </style>
-  </head>
+  @media (max-width: 450px) {
+    #device { width: 90%; }
+  }
+</style>
 
-  <body>
-    <h1>&lt;tv-program&gt; web component</h1>
+<h1>&lt;tv-program&gt; web component</h1>
 
-    <p><a href="https://github.com/gromnitsky/tv-program">Github</a></p>
+<p><a href="https://github.com/gromnitsky/tv-program">Github</a></p>
+<form>Select device: <select></select>, hover for "snow", click to pause.</form>
 
-    <form>
-      Select device: <select></select>, hover for "snow", click to pause.
-    </form>
+<div id="device"> <!-- gets injected here --> </div>
 
-    <div id="device"></div>
+<p>HTML code:</p>
+<pre id="example"></pre>
 
-    <p>HTML code:</p>
+<script type="module">
+  import {devices} from './tv-program/tv-program.js'
 
-    <pre id="example"></pre>
+  let params = new URLSearchParams(window.location.search)
 
-    <script type="module">
-      import {devices} from './tv-program/tv-program.js'
+  function device_inject(name) {
+      if (!devices[name]) name = 'crt tv with antenna'
 
+      document.querySelector('#device').innerHTML = `<tv-program debug="true" device="${name}"></tv-program>`
+      document.querySelector('#example').innerText = `<tv-program device="${name}"></tv-program>`
+
+      params.set('d', name)
+      history.replaceState(null, '', '?'+params);
+  }
+
+  function select_update(current) {
       let select = document.querySelector('select')
       select.innerHTML = Object.keys(devices).map( dev => {
-          return `<option value="${dev}">${dev}</option>`
+          return `<option value="${dev}" ${dev === current ? 'selected' : ''}>${dev}</option>`
       }).join`\n`
-      select.onchange = evt => inject_device(evt.target.value)
+      select.onchange = evt => device_inject(evt.target.value)
+  }
 
-      function inject_device(name) {
-          document.querySelector('#device').innerHTML = `<tv-program debug="true" device="${name}"></tv-program>`
-          document.querySelector('#example').innerText = `<tv-program device="${name}"></tv-program>`
-      }
-
-      inject_device("crt tv with antenna")
-    </script>
-
-  </body>
-</html>
+  select_update(params.get('d'))
+  device_inject(params.get('d'))
+</script>
