@@ -104,13 +104,13 @@ customElements.define('tv-program', class extends HTMLElement {
             node.muted = true
             let src = document.createElement('source')
             src.addEventListener('error', () => this.boot = -1)
-            src.src = url(href)
+            src.src = href
             node.appendChild(src)
             sibling.after(node)
             return node
         }
 
-        this.tv_snow = mkvid(this.tv_frame, "snow", "snow.mp4")
+        this.tv_snow = mkvid(this.tv_frame, "snow", url("snow.mp4"))
         // once "snow" is ready, hide a placeholder & show a real device frame
         this.tv_snow.addEventListener('canplay', () => {
             setTimeout( () => {
