@@ -48,6 +48,7 @@ customElements.define('tv-program', class extends HTMLElement {
         opt.program.x = this.getAttribute('x') || opt.program.x
         opt.program.y = this.getAttribute('y') || opt.program.y
         this.debug = this.getAttribute('debug')
+        this.log = this.debug ? console.log.bind(console) : function() {}
 
         this.transition = 5000
         let sr = this.attachShadow({mode: 'open'})
@@ -168,7 +169,5 @@ customElements.define('tv-program', class extends HTMLElement {
         this.snow(false)
         this.tv_program.paused ? this.tv_program.play() : this.tv_program.pause()
     }
-
-    log(msg) { if (this.debug) console.log(msg) }
 
 })
